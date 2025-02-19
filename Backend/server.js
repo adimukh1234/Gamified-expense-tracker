@@ -2,7 +2,9 @@ const express= require("express");
 const mongoose = require("mongoose");
 const cors= require("cors");
 const dotenv= require("dotenv");
-
+const userRoutes= require("./routes/userRoutes");
+const expenseRoutes= require("./routes/expenseRoutes");
+const budgetRoutes= require("./routes/budgetRoutes");
 dotenv.config();
 
 const app= express();
@@ -12,12 +14,15 @@ app.use(cors());
 app.use(express.json());
 
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
 
-app.use("/api/users", require("./routes/userRoutes"));
-app.use("/api/expenses", require("./routes/expenseRoutes"));
+app.use("/api/users", userRoutes);
+app.use("/api/expenses", expenseRoutes);
+//app.use("/api/budgets", budgetRoutes);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+module.exports= app;
